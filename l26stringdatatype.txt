@@ -1,0 +1,373 @@
+=>Mysql DATA TYPES(Version V8)
+
+*String Data Types (14 Types  6/6/2)
+Data Types				Description
+1.CHAR(size)				A FIXED Length string (can contains letters,number and special characters). can be from 0 to 255
+2.VARCHAR(size)				A Variable Length string (can contains letters,numbers and special characters)	. can be from 0 to 65535
+3.TEXT(size)			    can be from 256 to 65535 (65 KB)
+4.TINYTEXT					can be from 0 to 255
+5.MEDIYMTEXT				can be from 0 to 16777215 characters (16 MB)
+6.LONGTEXT 					can be from 0 to 4294967295 characters (4 GB)
+
+7.BINARY(size)				Equal to CHAR().
+8.VARBINARY(size)			Equal to VARCHAR()
+9.BLOB(size)				FOR BLOBS can be from 256 to 65535 (65 KB)
+10.TINYBLOB(size)			FOR BLOBS can be from 0 to 255(bytes)
+11.MEDIUMBLOB				FOR BLOBS can be from 256 to 16777215 characters (16 MB)
+12.LONGBLOB					FOR BLOBS can be from 16777216 to 4294967295 characters (4 GB)
+	
+		(parameter)
+13.ENUM('value1','value2','value3',...)	A string object can have only one value. must be possible value. 65535 (65kb) (not in case sensitive)
+14.SET('value1','value2','value3',...)	A string object that can have 0 or more value. must be possible value.
+___________________________________________________________________CHA
+
+=>About CHAR
+*CHAR is faster than VARCHAR
+*Static Datatype
+*eg: Telophone numbers, ZIP Code
+*eg: Yes/No Flags: Y/N
+*eg: Sex : Male/ Female Flags : M/F
+
+NON-Unicode = 1 Character = 1 byte
+1 byte = 8 bit
+CHAR(4) VS VARCHAR(4)
+Value 				CHAR(4)		Storage  	VARCHAR(4) 		Stroage
+''					'    '		4 bytes		''				1 byte
+'ab'				'ab  '		4 bytes		'ab'			3 bytes
+'abc'				'abc '		4 bytes	    'abc'		 	4 bytes
+'abcd'				'abcd'		4 bytes		'abcd'			5 bytes
+'abcdefg'			'error'		     		'abcdefg'		  byte
+
+
+CREATE TABLE contacts(
+	name CHAR(5)
+);
+
+
+DESC contacts;
+
+INSERT INTO contacts(name)
+VALUES ('ko');
+
+INSERT INTO contacts(name)
+VALUES ('ko ko');
+
+INSERT INTO contacts(name)
+VALUES ('Hello');
+
+*error
+INSERT INTO contacts(name)
+VALUES ('hay now');
+
+INSERT INTO contacts(name)
+VALUES ('haynow');
+
+INSERT INTO contacts(name)
+VALUES 	('aung'),
+		('maung'),
+		('ko');
+
+DROP TABLE contacts;
+
+
+CREATE TABLE contacts(
+	name VARCHAR(5)
+);
+
+DESC contacts;
+
+INSERT INTO contacts(name)
+VALUES ('ko');
+
+INSERT INTO contacts(name)
+VALUES ('ko ko');
+
+INSERT INTO contacts(name)
+VALUES ('Hello');
+
+*error
+INSERT INTO contacts(name)
+VALUES ('hay now');
+
+INSERT INTO contacts(name)
+VALUES ('haynow');
+
+INSERT INTO contacts(name)
+VALUES 	('aung'),
+		('maung'),
+		('ko');
+
+_________________________________________________________
+
+=>CHAR() / VARCHAR() VS TEXT()
+
+CREATE TABLE mytests(
+	 id INT,
+	 name VARCHAR(50) DEFAULT 'nothing to show'
+);
+
+DESC mytests;
+
+INSERT INTO mytests(name) VALUES('aung aung');
+
+INSERT INTO mytests(id) VALUES(10);
+
+SELECT * FROM mytests;
+
+DROP TABLE mytests;
+
+
+CREATE TABLE mytests(
+	 id INT,
+	 name TEXT(50)
+);
+
+DESC mytests;
+
+INSERT INTO mytests(name) VALUES('aung aung');
+
+INSERT INTO mytests(id) VALUES(10);
+
+SELECT * FROM mytests;
+
+DROP TABLE mytests;
+
+
+*error(BLOB,TEXT,GEOMETRY or JSON can't have a DEFAULT value)
+CREATE TABLE mytests(
+	 id INT,
+	 name TEXT(50) DEFAULT 'nothing to show'
+);
+
+__________________________________________________________
+
+=>VARIABLES
+
+SHOW VARIABLES;
+
+*utf8_general_ci(ci is case insensitive) maxlength 3 is mean 3bytes per character.
+
+SHOW CHARACTER SET = for a single Database (METHOD 1)
+******************************************
+*check chartset
+SHOW VARIABLES LIKE 'character_set_database';
+*check collation
+SHOW VARIABLES LIKE 'collation_database';
+
+METHOD 2 (System Variables)
+***************************
+USE wdf2001;
+SELECT @@character_set_database;
+
+USE wdf2001;
+SELECT @@collation_database;
+
+METHOD 3
+********
+SELECT DEFAULT_CHARACTER_SET_NAME
+FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'wdf2001';
+
+SHOW CHARACTER SET = for ALl Database (METHOD 1)
+******************************************
+SHOW DATABASES;
+
+SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA;
+
+SELECT SCHEMA_NAME 'DATABASES' FROM INFORMATION_SCHEMA.SCHEMATA;
+
+SELECT DEFAULT_CHARACTER_SET_NAME FROM INFORMATION_SCHEMA.SCHEMATA;
+
+SELECT DEFAULT_CHARACTER_SET_NAME FROM INFORMATION_SCHEMA.SCHEMATA;
+SELECT DEFAULT_CHARACTER_SET_NAME AS 'charset' FROM INFORMATION_SCHEMA.SCHEMATA;
+
+SELECT DEFAULT_COLLATION_NAME FROM INFORMATION_SCHEMA.SCHEMATA;
+SELECT DEFAULT_COLLATION_NAME AS 'collation' FROM INFORMATION_SCHEMA.SCHEMATA;
+
+SELECT SCHEMA_NAME AS 'all databases',DEFAULT_CHARACTER_SET_NAME AS 'charset',DEFAULT_COLLATION_NAME AS 'collation'
+FROM INFORMATION_SCHEMA.SCHEMATA;
+
+
+SHOW CHARACTER SET = for a single Table
+***************************************
+SHOW FULL COLUMNS FROM tablename;
+SHOW TABLE STATUS WHERE NAME LIKE 'tablename';
+SHOW CREATE TABLE tablename;
+
+
+*SHOW CHARACTER SET = for getting the collation from FIELD name
+SHOW FULL COLUMNS FROM tablename WHERE Field = 'fieldname';
+
+CREATE TABLE mytests(
+	col1 TINYTEXT,
+	col2 TEXT,
+	col3 MEDIUMTEXT,
+	col4 LONGTEXT
+);
+
+DESC mytests;
+
+DROP TABLE mytests;
+
+CREATE TABLE mytests(
+	col1 TEXT,
+	col2 TEXT(0),
+	col3 TEXT(5)
+);
+INSERT INTO mytests(col1,col2,col3)
+VALUES('aung aung','maung maung,'aung kyaw kyaw')
+DESC mytests;
+
+DROP TABLE mytests;
+
+
+CREATE TABLE mytests(
+	col1 TEXT(255), -- 1-255 tinytext
+ 	col2 TEXT(65535), -- 255-65535 text
+ 	col3 TEXT(16777215), -- 65535-16777215 mediumtext
+ 	col4 TEXT(4294967295) -- 16777215-4294967295 longtext
+) ENGINE=InnoDB CHARSET=latin1;
+
+DESC mytests;
+
+CREATE TABLE mytests(
+	col1 TEXT(255), -- 1-255 tinytext
+ 	col2 TEXT(65535), -- 25-65535 text
+ 	col3 TEXT(16777215), -- 65535-16777215 mediumtext
+ 	col4 TEXT(4294967295) -- 16777215-4294967295 longtext
+) ENGINE=InnoDB CHARSET=latin2;
+
+SHOW FULL COLUMNS FROM tablename;
+
+SHOW TABLE STATUS WHERE NAME LIKE 'mytests';
+
+SHOW CREATE TABLE mytests;
+
+DROP TABLE mytests;
+
+CREATE TABLE mytests(
+	col1 TEXT(255), -- 1-255 tinytext
+ 	col2 TEXT(65535), -- 25-65535 text
+ 	col3 TEXT(16777215), -- 65535-16777215 mediumtext
+ 	col4 TEXT(4294967295) -- 16777215-4294967295 longtext
+) ENGINE=InnoDB CHARSET=udf8;
+
+DROP TABLE mytests;
+
+CREATE TABLE mytest(
+	col1 TEXT(85), -- 1-85 / 3 tinytext
+ 	col2 TEXT(21845), -- 85-21845 / 3 text
+ 	col3 TEXT(5592405), -- 21846-5592405 / 3 mediumtext
+ 	col4 TEXT(4294967295) -- 5592405-4294967295 longtext
+) ENGINE=InnoDB CHARSET=udf8;
+
+SHOW TABLE STATUS WHERE NAME LIKE 'mytests';
+
+SHOW CREATE TABLE mytests;
+
+DROP TABLE mytests;
+__________________________________________________
+
+=>EXAMPLE char and binary
+
+CREATE TABLE mytests()
+	col1 CHAR,
+	col2 CHAR(255)
+);
+
+DESC mytests;
+DROP TABLE mytests;
+
+*error in 256
+CREATE TABLE mytests()
+	col1 CHAR,
+	col2 CHAR(256)
+);
+DESC mytests;
+DROP TABLE mytests;
+
+CREATE TABLE mytests()
+	col1 BINARY,
+	col2 BINARY(255)
+);
+DESC mytests;
+DROP TABLE mytests;
+
+*error in 256
+CREATE TABLE mytests()
+	col1 BINARY,
+	col2 BINARY(256)
+);
+DESC mytests;
+DROP TABLE mytests;
+
+CREATE TABLE mytests()
+	col1 BINARY(30)
+);
+DESC mytests;
+DROP TABLE mytests;
+
+INSERT INTO mytests(col1) VALUE ('Kyaw Kyaw Aung');
+________________________________________________
+
+ENUM(enumeration)
+
+CREATE TABLE motos(
+	id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+	name VARCHAR(50),
+	gender ENUM('M','F','Other') NOT NULL
+);
+
+DESC motos;
+
+INSERT INTO motos(name,gender) VALUES('aung aung','M');
+
+SELECT * FROM motos;
+
+*error
+INSERT INTO motos(name,gender) VALUES('aung aung','K');
+
+INSERT INTO motos(name,gender) VALUES('hla hla','f');
+
+INSERT INTO motos(name,gender) VALUES('mya mya','other');
+
+
+INSERT INTO motos(name,gender) VALUES('hla hla',1);
+INSERT INTO motos(name,gender) VALUES('hla hla',2);
+INSERT INTO motos(name,gender) VALUES('hla hla',3);
+
+INSERT INTO motos(name,gender) VALUES('hla hla','1');
+INSERT INTO motos(name,gender) VALUES('hla hla','2');
+INSERT INTO motos(name,gender) VALUES('hla hla','3');
+
+*error(bcz not defined)
+INSERT INTO motos(name,gender) VALUES('hla hla','4');
+NSERT INTO motos(name,gender) VALUES('hla hla','m,f');
+_________________________________________________
+
+=>SET
+
+CREATE TABLE motas(
+	id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+	name VARCHAR(50),
+	role SET('C','R','U','D') NOT NULL
+);
+
+DESC motas;
+
+INSERT INTO motas(name,role) VALUE('aung aung','C');
+INSERT INTO motas(name,role) VALUE('aung aung','d');
+INSERT INTO motas(name,role) VALUE('aung aung','c,r');
+INSERT INTO motas(name,role) VALUE('aung aung','c,r,d');
+INSERT INTO motas(name,role) VALUE('aung aung','c,r,d,u');
+
+
+*error
+INSERT INTO motas(name,role) VALUE('aung aung','1,2');
+INSERT INTO motas(name,role) VALUE('aung aung',1,2);
+INSERT INTO motas(name,role) VALUE('aung aung','k');
+INSERT INTO motas(name,role) VALUE('aung aung','c,k');
+
+SELECT * FROM motas;
+
+
+__________________________________________________

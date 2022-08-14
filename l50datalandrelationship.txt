@@ -1,0 +1,99 @@
+=>Different Types of DATA Relationships   		//6.3.2022(Sun)
+(i)One to One Relationship (1:1)
+(ii)One to Many Relationship (1:n)
+(iii)Many to Many Relationship (n:n)
+
+
+(i)One to One Relationship (1:1)
+
+   Note : an employee has exactly one wifi password and ever wifi passcode belongs to exactly one employee
+   one record in table A belongs to exactly one record in table B
+   husband & wife
+   citizen & passport
+
+(ii)One to Many Relationship (1:n)
+	
+	one record in table A has one or many related records in table B
+    customers & orders
+    mother & children
+
+(iii)Many to Many Relationship (n:n)
+
+	One record in table A has one or may related tables in table B by using Dummy table.
+
+
+Students (1:1 with Studetinfos, 1:n with Enrollments, 1:n with Reviews)
+Id (PK)
+Regcode (UN)
+Firstname
+Lastname
+Gender (1,2)
+Dob
+Email (UN)
+Password
+Status 
+Created_at
+Updated_at
+
+
+Studentinfos
+Id (PK)
+Coverphoto
+Profilephoto
+Nrcnumber (UN)
+Phone (UN)
+Address
+Student_id(FK)
+
+Teachers (1:n with Classes)
+Id
+Name
+Phone (UN)
+Email (UN)
+
+
+Subjects (1:n with Classes)
+Id
+Course (UN)
+Subjecttype
+Fee
+Requirement
+
+
+Classes (1:n with Reviews,1:n with Enrollments)
+Id
+Subject_id(FK)
+Batch
+Week
+Startdate
+Starttime
+Endtime
+Teacher_id(FK)
+
+Enrollments 
+Id
+Paymentmethod
+Class_id(FK)
+Student_id(FK)
+Status
+Created_at
+Updated_at
+
+
+Reviews
+Id
+Rating (<=5)
+Remark
+Class_id(FK)
+Student_id(FK)
+Created_at
+Updated_at
+
+Attendances (1:n with students, 1:n with Classes)
+Id
+Classdate
+Class_id(FK)
+Student_id(FK)
+Attcode
+Remark
+created_at

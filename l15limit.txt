@@ -1,0 +1,46 @@
+=>LIMIT Clause
+LIMIT Syntax
+
+METHOD 1
+SELECT * FROM tablename
+WHERE condition
+LIMIT number;
+
+METHOD 2
+SELECT col1,col2,...
+FROM tablename
+WHERE condition
+LIMIIT number;
+-----------------------------------------------------
+
+EXERCISES
+
+SELECT * FROM employees;
+
+SELECT * FROM employees LIMIT 5;
+
+SELECT name,age,salary,city
+FROM employees
+WHERE salary > 400000;
+
+SELECT name,age,salary,city
+FROM employees
+WHERE salary > 400000
+LIMIT 2;
+
+SELECT name,age,salary,city
+FROM employees
+WHERE salary > 400000
+ORDERY BY salary;
+
+SELECT name,age,salary,city
+FROM employees
+WHERE salary > 400000
+ORDERY BY name
+LIMIT 2;
+
+SELECT name,age,salary,city
+FROM employees
+WHERE salary > 400000
+ORDERY BY name
+LIMIT 3;
